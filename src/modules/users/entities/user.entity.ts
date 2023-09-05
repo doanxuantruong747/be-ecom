@@ -1,33 +1,30 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  OneToMany,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Role } from 'src/config/role';
+import CoreEntity from '../../../../src/entities/CoreEntity.entity';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 
 @Entity({ name: 'users' })
-export class User {
-  @PrimaryGeneratedColumn({ type: 'int' })
-  id: number;
-
+export class User extends CoreEntity {
   @Column({ unique: true })
-  username: string;
+  userName: string;
 
-  @Column()
+  @Column('varchar', { nullable: true })
   password: string;
 
-  @Column()
-  createdAt: Date;
+  @Column('varchar', { default: null })
+  avatar: string;
 
-  @Column({ nullable: true })
-  authStrategy: string;
+  @Column('varchar', { length: 20, default: '' })
+  phone: string;
 
-  // @OneToOne(() => Profile)
-  // @JoinColumn()
-  // profile: Profile;
+  @Column('varchar', { length: 50, unique: true })
+  email: string;
 
-  // @OneToMany(() => Post, (post) => post.user)
-  // posts: Post[];
+  @Column({ default: false })
+  isBlock: boolean;
+
+  @Column('varchar', { default: Role.CLIENT_USER, nullable: true })
+  role: string;
+
+  @Column({ default: false })
+  isDeleted: boolean;
 }
