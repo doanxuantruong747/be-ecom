@@ -1,18 +1,16 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
-import { JwtService } from '@nestjs/jwt';
-import { Role } from 'src/config/role';
+import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
+import { Reflector } from "@nestjs/core";
+import { JwtService } from "@nestjs/jwt";
+import { Role } from "src/config/role";
+import { AuthService } from "src/modules/auth/auth.service";
 
 @Injectable()
 export class RoleGuard implements CanActivate {
-  constructor(private reflector: Reflector, private jwtService: JwtService) {}
+  constructor(private reflector: Reflector, private jwtService: JwtService, private readonly authService: AuthService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     try {
-      const roles = this.reflector.get<Array<string>>(
-        'roles',
-        context.getHandler(),
-      );
+      const roles = this.reflector.get<Array<string>>("roles", context.getHandler());
 
       if (!roles || roles[0] === Role.ALL) return true;
 
@@ -30,15 +28,15 @@ export class RoleGuard implements CanActivate {
 
       let user = this.jwtService.verify(token);
 
-      if (role === Role.SUPER_USER) {
-        // user = await this.superUserService.getSingle(user.email);
+      if (role === Role.CLIENT_USER) {
+        user = await this.authService.getSingleUser(user.email);
         request.user = user;
         return user;
       }
       if (user) return true;
       if (!user) return false;
 
-      // return roles.includes(user?.role) || roles.includes(Role.ALL);
+      return roles.includes(user?.role) || roles.includes(Role.ALL);
     } catch (error) {
       console.log(error);
 

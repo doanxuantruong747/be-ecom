@@ -1,43 +1,33 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
-import { CreateUser } from 'src/types/User';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req, Res } from "@nestjs/common";
+import { AuthService } from "./auth.service";
+import { CreateAuthDto } from "./dto/create-auth.dto";
+import { UpdateAuthDto } from "./dto/update-auth.dto";
+import { CreateUser } from "src/types/User";
 
-@Controller('auth')
+@Controller("auth")
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
-
-  @Post()
-  create(@Body() createAuthDto: CreateUser) {
-    return this.authService.create(createAuthDto);
+  // resgister a new user
+  @Post("/resgister")
+  async resgister(@Req() req: any, @Res() res: any) {
+    const body: CreateUser = req.body;
+    try {
+      const response = await this.authService.resgister(body);
+      return res.status(200).json(response);
+    } catch (error) {
+      console.log("resgister error", error);
+    }
   }
 
-  @Get()
-  findAll() {
-    return this.authService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.authService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
-    return this.authService.update(+id, updateAuthDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.authService.remove(+id);
+  // login
+  @Post("/login")
+  async Login(@Req() req: any, @Res() res: any) {
+    const body: CreateUser = req.body;
+    try {
+      const response = await this.authService.Login(body);
+      return res.status(200).json(response);
+    } catch (error) {
+      console.log("login error", error);
+    }
   }
 }
