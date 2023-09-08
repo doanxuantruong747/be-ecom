@@ -7,6 +7,7 @@ import { ENTITIES } from "./entities";
 import { CONFIG } from "../config";
 import { AuthModule } from "./modules/auth/auth.module";
 import { ProductsModule } from "./modules/products/products.module";
+import { migrations } from "./migration";
 
 @Module({
   imports: [
@@ -18,7 +19,11 @@ import { ProductsModule } from "./modules/products/products.module";
       password: CONFIG.DB_PASSWORD,
       database: CONFIG.DB_NAME,
       entities: ENTITIES,
-      synchronize: true
+      synchronize: true,
+      migrationsTableName: "migrations",
+      migrationsRun: true,
+      migrations: migrations,
+      subscribers: []
     }),
     UsersModule,
     AuthModule,

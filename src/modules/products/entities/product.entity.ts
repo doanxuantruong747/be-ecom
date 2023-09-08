@@ -13,10 +13,10 @@ export class Product extends CoreEntity {
   @Column({ type: "varchar", length: 500, nullable: true })
   thumbnail: string;
 
-  @Column("json", { default: [] })
-  images: string[];
+  @Column({ type: "json", nullable: true })
+  images: string;
 
-  @Column({ type: "int" })
+  @Column({ type: "int", default: 0 })
   price: number;
 
   @Column({ type: "varchar", nullable: true })
@@ -25,11 +25,14 @@ export class Product extends CoreEntity {
   @Column({})
   race: number;
 
-  @Column({ type: "varchar", length: 5000, nullable: true })
+  @Column({ type: "json", nullable: true })
   blog: string;
 
   @Column({ type: "int", default: 0 })
   categoryId: number;
+
+  @Column({ type: "int", default: 0 })
+  usreId: number;
 
   @Column({ type: "boolean", default: false })
   isDeleted: boolean;
