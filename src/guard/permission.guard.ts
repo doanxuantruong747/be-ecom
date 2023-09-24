@@ -1,6 +1,6 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
-import { JwtService } from '@nestjs/jwt';
+import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
+import { Reflector } from "@nestjs/core";
+import { JwtService } from "@nestjs/jwt";
 
 @Injectable()
 export class PermissionGuard implements CanActivate {
@@ -8,12 +8,9 @@ export class PermissionGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     try {
-      console.log('canActivate');
+      console.log("canActivate");
 
-      const permission = this.reflector.get<string>(
-        'permission',
-        context.getHandler(),
-      );
+      const permission = this.reflector.get<string>("permission", context.getHandler());
       if (!permission) return true;
 
       const request = context.switchToHttp().getRequest();
@@ -28,15 +25,12 @@ export class PermissionGuard implements CanActivate {
       }
 
       const user = this.jwtService.verify(token, {
-        secret: process.env.JWT_SECRET,
+        secret: process.env.JWT_SECRET
       });
 
       // INFO: personal have on role exited in role.
       request.user = user;
-      return (
-        user?.permissions.includes(permission) ||
-        user?.permissions.includes('all')
-      );
+      return user?.permissions.includes(permission) || user?.permissions.includes("all");
     } catch (error) {
       return false;
     }

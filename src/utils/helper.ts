@@ -10,6 +10,7 @@ import crypto from "crypto";
 import moment from "moment";
 
 import { ObjectId } from "bson";
+import { extname } from "path";
 
 export function Match(property: string, validationOptions?: ValidationOptions) {
   return (object: any, propertyName: string) => {
@@ -149,4 +150,23 @@ export const generateRandomString = (length: any) => {
     result += characters.charAt(randomIndex);
   }
   return result;
+};
+
+export const generateFilename = (req, file, cb) => {
+  // Generating a 32 random chars long string
+  const randomName = Array(32)
+    .fill(null)
+    .map(() => Math.round(Math.random() * 16).toString(16))
+    .join("");
+  //Calling the callback passing the random name generated with the original extension name
+  cb(null, `${randomName}${extname(file.originalname)}`);
+};
+
+export const resJson = (data: any, message: string, status: boolean, code: string) => {
+  return {
+    data: data ? data : [],
+    message: message,
+    status: status,
+    code
+  };
 };

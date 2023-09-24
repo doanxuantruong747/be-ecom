@@ -7,6 +7,8 @@ import { PassportModule } from "@nestjs/passport";
 import { JwtModule } from "@nestjs/jwt";
 import { CONFIG } from "config";
 
+console.log("CONFIG.JWT_EXPIRE", CONFIG.JWT_EXPIRE);
+console.log("CONFIG.JWT_SECRET", CONFIG.JWT_SECRET);
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]),

@@ -1,6 +1,6 @@
 import { Role } from "src/config/role";
 import CoreEntity from "../../../../src/entities/CoreEntity.entity";
-import { Column, Entity, JoinColumn, OneToMany, OneToOne } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne } from "typeorm";
 
 @Entity({ name: "products" })
 export class Product extends CoreEntity {
@@ -10,10 +10,10 @@ export class Product extends CoreEntity {
   @Column({ type: "varchar", length: 1000, nullable: true })
   description: string;
 
-  @Column({ type: "varchar", length: 500, nullable: true })
+  @Column({ type: "varchar", length: 555, nullable: true })
   thumbnail: string;
 
-  @Column({ type: "json", nullable: true })
+  @Column({ type: "text", nullable: true })
   images: string;
 
   @Column({ type: "int", default: 0 })
@@ -25,7 +25,7 @@ export class Product extends CoreEntity {
   @Column({})
   race: number;
 
-  @Column({ type: "json", nullable: true })
+  @Column({ type: "longtext", nullable: true })
   blog: string;
 
   @Column({ type: "int", default: 0 })

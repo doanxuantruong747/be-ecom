@@ -15,8 +15,7 @@ export class RoleGuard implements CanActivate {
       if (!roles || roles[0] === Role.ALL) return true;
 
       const request = context.switchToHttp().getRequest();
-      const bearerToken = request?.headers?.authorization;
-      const role = request.headers?.pg_role;
+      const bearerToken = request?.headers?.Authorization;
 
       if (!bearerToken) {
         return false;
@@ -28,12 +27,13 @@ export class RoleGuard implements CanActivate {
 
       let user = this.jwtService.verify(token);
 
-      if (role === Role.CLIENT_USER) {
+      if (user) {
         user = await this.authService.getSingleUser(user.email);
-        request.user = user;
-        return user;
+        if (user.role === Role.CLIENT_USER || user.role === Role.SUPER_USER) {
+          request.user = user;
+          return true;
+        }
       }
-      if (user) return true;
       if (!user) return false;
 
       return roles.includes(user?.role) || roles.includes(Role.ALL);

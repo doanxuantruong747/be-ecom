@@ -12,6 +12,7 @@ export class AuthController {
   async resgister(@Req() req: any, @Res() res: any) {
     const body: CreateUser = req.body;
     try {
+      console.log("----register-----", body);
       const response = await this.authService.resgister(body);
       return res.status(200).json(response);
     } catch (error) {
